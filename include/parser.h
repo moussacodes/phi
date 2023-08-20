@@ -5,21 +5,23 @@
 
 typedef enum
 {
+    SET,
     VARIABLE,
     FUNCTION,
-    LOOP,
-    CONDITIONAL
 } PropositionType;
-
 
 typedef struct
 {
-    Token tokens[50];
-    int lineNumber;
+    Token **tokens;
+    int numPropTokens;
+    int startLineNumber;
+    int endLineNumber;
     PropositionType propType;
 } Proposition;
 
+Proposition *createProposition(Token **buffer, int numTokens);
 
-char **parser(Token **tokens, int numTokens);
+
+Proposition **extract_propositions(Token **tokens, int numTokens, int* nbPropositions);
 
 #endif // PARSER_H

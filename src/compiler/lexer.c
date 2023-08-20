@@ -94,6 +94,18 @@ Token **tokenize(Content **input, int numLines, int *numTokens)
             if (IS_DELIMITER(currentChar))
             {
                 TokenType type = TOKEN_DELIMITER;
+                if (currentChar == ';' && input[i]->lineContent[index + 1] == ';')
+                {
+                    i++;
+                    continue;
+                }
+                buffer[bufferIndex++] = currentChar;
+
+                if (currentChar == ':' && input[i]->lineContent[index + 1] == '=')
+                {
+                    buffer[bufferIndex++] = '=';
+                    index++;
+                }
                 if (currentChar == '|')
                 {
                     type = TOKEN_OPTION;
@@ -102,7 +114,6 @@ Token **tokenize(Content **input, int numLines, int *numTokens)
                 {
                     type = TOKEN_DEFAULT_KEY;
                 }
-                buffer[bufferIndex] = currentChar;
                 buffer[bufferIndex + 1] = '\0'; // Null-terminate the buffer
                 tokens = realloc(tokens, (*numTokens + 1) * sizeof(Token *));
                 tokens[*numTokens] = createToken(type, buffer, i, index + 1);
